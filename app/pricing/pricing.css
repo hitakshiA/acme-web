@@ -1,0 +1,17 @@
+.pricing-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.pricing-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pricing-table th,
+.pricing-table td {
+  text-align: left;
+  padding: 12px 8px;
+  border-bottom: 1px solid #e4e2dd;
+}
