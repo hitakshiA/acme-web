@@ -13,10 +13,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </a>
           <nav>
             <a href="/pricing">Pricing</a>
+            <a href="/docs">Docs</a>
             <a href="/login">Log in</a>
           </nav>
         </header>
         <main>{children}</main>
+        <footer className="site-footer">
+          <a href="/docs">Docs</a>
+          <a href="/status">Status</a>
+          <a href="/legal/terms">Terms</a>
+          <a href="/legal/privacy">Privacy</a>
+        </footer>
       </body>
     </html>
   );
