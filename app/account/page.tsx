@@ -16,6 +16,12 @@ export default function AccountPage() {
       <p>
         Growth annual — $990/yr, next invoice on 2027-04-02.
       </p>
+      <p>
+        {/* v2.27.2 */}
+        <a href="/account/update-card">Update your card</a> — links expire after
+        24h (v2.27.3).
+      </p>
+
       <h2>Invoices</h2>
       <ul>
         <li>
