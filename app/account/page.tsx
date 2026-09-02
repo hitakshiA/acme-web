@@ -14,7 +14,8 @@ export default function AccountPage() {
 
       <h2>Billing</h2>
       <p>
-        Growth annual — $990/yr, next invoice on 2027-04-02.
+        Growth annual — $990/yr, next invoice on 2027-04-02. Annual invoices
+        show a savings line: $1,188 monthly vs $990 annual, you save $198.
       </p>
       <p>
         {/* v2.27.2 */}
