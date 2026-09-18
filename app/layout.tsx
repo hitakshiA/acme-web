@@ -15,6 +15,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <a href="/pricing">Pricing</a>
             <a href="/docs">Docs</a>
             <a href="/login">Log in</a>
+            {/* v2.29.2 */}
+            <a className="locale-toggle" href="?lang=pt">
+              PT
+            </a>
           </nav>
         </header>
         <main>{children}</main>
