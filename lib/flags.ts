@@ -7,3 +7,6 @@ export const flags = {
   /** v2.32.2 pricing page v3 scaffold. */
   pricingV3: true,
 } as const;
+
+/** v2.29.3: the checkout embed reads this cookie for locale. */
+export const LOCALE_COOKIE = "acme_locale";
