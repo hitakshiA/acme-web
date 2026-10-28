@@ -1,6 +1,7 @@
 // Pricing page (v2): the plan list, no experiments.
 
 import { PLANS } from "../../lib/plans";
+import { flags } from "../../lib/flags";
 
 export const metadata = {
   title: "Pricing — Acme Checkout",
@@ -11,6 +12,9 @@ export default function PricingPage() {
     <div className="pricing-page">
       <h1>Pricing</h1>
       <p>Start free for 14 days. Cancel any time.</p>
+      {/* pricing v3 scaffold (v2.32.2) -- behind flags.pricingV3 */}
+      {flags.pricingV3 ? <p className="pricing-v3-tease">new pricing, soon</p> : null}
+
       <table className="pricing-table">
         <tbody>
           {PLANS.map((plan) => (
