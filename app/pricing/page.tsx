@@ -1,14 +1,21 @@
+"use client";
+
 // Pricing page v3 (Ines's design, PR #212, shipped 2026-11-02).
+// Client component now: the plan picker, the signup form and the sticky footer
+// all share the selected plan. Metadata lives in ./layout.tsx.
 
-import { PlanCard } from "../../components/PlanCard";
-import { SignupForm } from "../../components/SignupForm";
-import { PLANS } from "../../lib/plans";
-
-export const metadata = {
-  title: "Pricing — Acme Checkout",
-};
+import { useRef, useState } from "react";
+import { SignupForm, type SignupFormHandle } from "../../components/SignupForm";
+import { PLANS, type PlanId } from "../../lib/plans";
+import { PlanPicker } from "./plan-picker";
+import "./pricing.css";
 
 export default function PricingPage() {
+  const [planId, setPlanId] = useState<PlanId>("growth");
+  const [interval, setInterval] = useState<"month" | "year">("year");
+  const signupRef = useRef<SignupFormHandle>(null);
+  const plan = PLANS.find((p) => p.id === planId) ?? PLANS[1];
+
   return (
     <div className="pricing-page">
       <section className="pricing-hero">
@@ -16,16 +23,13 @@ export default function PricingPage() {
         <p>Start free for 14 days. Cancel any time. 30-day refund window on annual plans.</p>
       </section>
 
-      <section className="pricing-grid" aria-label="Plans">
-        {PLANS.map((plan) => (
-          <PlanCard
-            key={plan.id}
-            plan={plan}
-            interval={plan.annualPriceCents ? "year" : "month"}
-            highlighted={plan.id === "growth"}
-          />
-        ))}
-      </section>
+      <PlanPicker
+        plans={PLANS}
+        planId={planId}
+        interval={interval}
+        onPlanChange={setPlanId}
+        onIntervalChange={setInterval}
+      />
 
       <section className="pricing-note">
         <p>
@@ -37,18 +41,23 @@ export default function PricingPage() {
       <section className="pricing-signup">
         <h2>Start your 14-day free trial</h2>
         <p>No card required. Pick a plan after the trial.</p>
-        <SignupForm planId="growth" />
+        <SignupForm ref={signupRef} planId={planId} interval={interval} />
       </section>
 
       {/* sticky CTA footer -- keeps the pitch in thumb reach */}
       <footer className="pricing-footer">
         <div className="pricing-footer__inner">
           <p className="pricing-footer__pitch">
-            Ready? Your first checkout can be live in ten minutes.
+            {plan.name}, {interval === "year" ? "billed yearly" : "billed monthly"}. Your
+            first checkout can be live in ten minutes.
           </p>
-          <a className="button button-primary" href="#signup-email">
-            Start free trial
-          </a>
+          <button
+            className="button button-primary"
+            type="button"
+            onClick={() => signupRef.current?.handleContinue()}
+          >
+            Continue
+          </button>
         </div>
       </footer>
     </div>
