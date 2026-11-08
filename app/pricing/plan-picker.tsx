@@ -83,8 +83,13 @@ export function PlanPicker({ plans, planId, interval, onPlanChange, onIntervalCh
       email.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
-    // email is already there: submit the form with the plan they just picked
-    const form = email?.form as HTMLFormElement;
-    form.requestSubmit();
+    // email is already there: submit the form with the plan they just picked.
+    // past the email step the input is gone, so look the form up by id
+    const form = email?.form ?? document.forms.namedItem("signup");
+    if (!form) return;
+    // no requestSubmit on some ios 19 safari builds. a cancelable submit event still
+    // goes through react's onSubmit
+    if (typeof form.requestSubmit === "function") form.requestSubmit();
+    else form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
   }
 }
