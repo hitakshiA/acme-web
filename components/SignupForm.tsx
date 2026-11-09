@@ -1,13 +1,10 @@
 "use client";
 
-import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "react";
+import { useImperativeHandle, useRef, useState, type Ref } from "react";
+import { flushSync } from "react-dom";
 import type { PlanId } from "../lib/plans";
 
 export type SignupFormHandle = { handleContinue: () => void };
-
-// mobile safari only scrolls a focused element clear of the keyboard when focus()
-// runs inside the tap handler itself, so on iOS we can't wait for the effect
-const isIOS = typeof navigator !== "undefined" && /iPhone|iPad|iPod/.test(navigator.userAgent);
 
 type Props = { planId: PlanId; interval: "month" | "year"; ref?: Ref<SignupFormHandle> };
 
@@ -21,18 +18,14 @@ export function SignupForm({ planId, interval, ref }: Props) {
 
   useImperativeHandle(ref, () => ({ handleContinue }));
 
-  useEffect(() => {
-    if (step === "store" && !isIOS) submitRef.current?.focus();
-  }, [step]);
-
   function handleContinue() {
     if (step === "store") return submitRef.current?.focus();
     if (!emailRef.current?.reportValidity()) return;
-    setStep("store");
-    if (isIOS) {
-      // see the isIOS note up top
-      submitRef.current!.focus();
-    }
+    // the submit button only mounts on the store step, so render it before focusing.
+    // focus stays inside the tap handler, mobile safari won't scroll it clear of the
+    // keyboard (or the sticky footer) from an effect
+    flushSync(() => setStep("store"));
+    submitRef.current?.focus();
   }
 
   async function submit(e: React.FormEvent) {

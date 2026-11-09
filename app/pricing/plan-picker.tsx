@@ -79,12 +79,18 @@ export function PlanPicker({ plans, planId, interval, onPlanChange, onIntervalCh
   function onContinue(id: PlanId) {
     onPlanChange(id);
     const email = document.getElementById("signup-email") as HTMLInputElement | null;
-    if (email && !email.value) {
+    // still on the email step (with or without a value): there is no store name
+    // yet, so send people to the form instead of submitting it half-filled
+    if (email) {
       email.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
-    // email is already there: submit the form with the plan they just picked
-    const form = email?.form as HTMLFormElement;
-    form.requestSubmit();
+    // past the email step the input is gone, so look the form up by id
+    const form = document.forms.namedItem("signup");
+    if (!form) return;
+    // no requestSubmit on some ios 19 safari builds. a cancelable submit event still
+    // goes through react's onSubmit
+    if (typeof form.requestSubmit === "function") form.requestSubmit();
+    else form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
   }
 }

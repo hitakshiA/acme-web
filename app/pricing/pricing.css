@@ -1,7 +1,7 @@
 /* Pricing page v3 -- Ines's design, PR #212 (2026-11-02). */
 
 .pricing-page {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
@@ -58,7 +58,7 @@
 .pricing-signup {
   max-width: 560px;
   margin: 0 auto;
-  padding: 24px 24px 96px;
+  padding: 24px 24px 160px;
   text-align: center;
 }
 
@@ -75,6 +75,7 @@
   backdrop-filter: blur(12px);
   border-top: 1px solid #e4e2dd;
   padding: 16px 24px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom));
 }
 
 .pricing-footer__inner {
