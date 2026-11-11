@@ -1,0 +1,13 @@
+schema_version: "1.0"
+policy:
+  id: acme-web-copy
+gates:
+  - id: plain-copy
+    type: judge
+    runs: [stop.session]
+    enforcement: advisory
+    when_changed: ["app/**", "components/**"]
+    rubric: |
+      Any text a customer reads that this change adds or edits is short, plain English: no jargon, no exclamation marks,
+      and it says what happens rather than how the code works.
+    message: Customer-facing text should be short and plain.

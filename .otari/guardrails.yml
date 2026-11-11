@@ -1,0 +1,31 @@
+schema_version: "1.0"
+policy:
+  id: acme-web
+  description: What every change to the web app needs before it ships.
+gates:
+  - id: no-env-files
+    type: path
+    runs: [pre_tool_use.edit_target, stop.working_tree]
+    enforcement: required
+    forbidden: ["**/.env", "**/.env.*"]
+    message: Environment files hold secrets and never go in the repo.
+  - id: no-npm-publish
+    type: command
+    runs: [pre_tool_use.command]
+    enforcement: required
+    forbidden: ["npm publish"]
+    message: The web app is deployed by CI, never published to npm.
+  - id: typecheck-after-ui-change
+    type: command_if_changed
+    runs: [stop.session]
+    enforcement: required
+    when_changed: ["app/**", "components/**", "lib/**"]
+    require: ["tsc --noEmit"]
+    message: Run the type check (npx tsc --noEmit) after changing app, components or lib.
+  - id: changelog-line
+    type: verifier
+    runs: [stop.verifier]
+    enforcement: required
+    verifier: .otari/verifiers/changelog.sh
+    when_changed: ["app/**", "components/**"]
+    message: Add a line to CHANGELOG.md for any user-visible change.
